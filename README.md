@@ -28,15 +28,17 @@ Alternatively, you can read the next 256 pseudorandom 32-bit numbers from the ou
 
 For example, to obtain a byte string suitable for stream encryption, you can pass the content of the output buffer directly to `pack()`:
 
-    function stream_encrypt($message, $key, $salt) {
-        $isaac = new ISAAC ($key . $salt);  // XXX: never use the same key & salt twice!
-        $mask = pack("V*", ...$isaac->r);   // PHP v5.6+;
+    function isaac_encrypt($message, $key, $salt) {
+        $isaac = new ISAAC ("$key\0$salt");  // XXX: never use the same key & salt twice!
+        $mask = pack("V*", ...$isaac->r);    // PHP v5.6+
         while (strlen($mask) < strlen($message)) {
             $isaac->isaac();  // refill the output buffer
             $mask .= pack("V*", ...$isaac->r);
         }
         return $message ^ substr($mask, 0, strlen($message));
     }
+
+(See also the `isaac_stream_test.php` script in the `tests/` directory.)
 
 If mixing calls to `rand()` with direct access to the output buffer, note that `rand()` pops off and returns the *last* value in the buffer (after refilling the buffer if it's empty).  This also matches the reference C implementation.
 

@@ -46,6 +46,10 @@ If mixing calls to `rand()` with direct access to the output buffer, note that `
 
 The `tests/` directory includes two test scripts, `isaac_test.php` and `isaac_test2.php`, which are PHP ports of the test code included in the ISAAC reference C implementation.  The outputs of those two scripts should exactly match the [`randvect.txt`](http://www.burtleburtle.net/bob/rand/randvect.txt) and [`randseed.txt`](http://www.burtleburtle.net/bob/rand/randseed.txt) files from Bon Jenkins' ISAAC page.  (For convenience, copies of the reference test output files are also included in the `tests/` directory.)
 
+## Loop unrolling
+
+The `isaac_unroll.php` file contains an alternative version of the `ISAAC` class with an unrolled inner loop.  The unrolled code is about 10% to 20% faster than the code in `isaac.php`, but also about 20% longer.  In all other respects, the two implementations are exactly identical: they provide the same API and produce the exact same output.
+
 
   [ISAAC]: https://en.wikipedia.org/wiki/ISAAC_(cipher) "ISAAC (cipher) on Wikipedia"
   [ISAAC-Home]: http://www.burtleburtle.net/bob/rand/isaacafa.html "ISAAC: a fast cryptographic random number generator"
